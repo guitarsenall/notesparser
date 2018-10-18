@@ -36,10 +36,10 @@ class BasicTextParser(Parser):
     """
     def __init__(self, handler):
         Parser.__init__(self, handler)
-        self.addRule(ListRule())
-        self.addRule(ListItemRule())
+        #self.addRule(ListRule())
+        #self.addRule(ListItemRule())
         self.addRule(TitleRule())
-        self.addRule(HeadingRule())
+        #self.addRule(HeadingRule())
         self.addRule(ParagraphRule())
 
         self.addFilter(r'\*(.+?)\*', 'emphasis')

@@ -31,9 +31,9 @@ class HTMLRenderer(Handler):
     markup as used in HTML documents.
     """
     def start_document(self):
-        print '<html><head><title>...</title></head><body>'
+        print '<html><head><title>...</title></head><body><PRE>'
     def end_document(self):
-        print '</body></html>'
+        print '</PRE></body></html>'
     def start_paragraph(self):
         print '<p>'
     def end_paragraph(self):
