@@ -35,9 +35,9 @@ class HTMLRenderer(Handler):
     def end_document(self):
         print '</PRE></body></html>'
     def start_paragraph(self):
-        print '<p>'
+        pass #print '<p>'
     def end_paragraph(self):
-        print '</p>'
+        pass #print '</p>'
     def start_heading(self):
         print '<h2>'
     def end_heading(self):
