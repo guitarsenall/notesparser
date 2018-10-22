@@ -24,7 +24,7 @@ class Parser:
             for filter in self.filters:
                 block = filter(block, self.handler)
             for rule in self.rules:
-                print rule.type
+                #print rule.type
                 if rule.condition(block):
                     last = rule.action(block, self.handler)
                     if last: break
@@ -41,7 +41,6 @@ class BasicTextParser(Parser):
         #self.addRule(ListItemRule())
         self.addRule(TitleRule())
         self.addRule(HeadingRule())
-        self.addRule(LongURLParentRule())
         self.addRule(LongURLLineRule())
         self.addRule(ParagraphRule())
 

@@ -31,5 +31,6 @@ NotesParser
         -   Try a long URL:
                     https://stackoverflow.com/questions/14620863
                         /git-add-all-subdirectories
-
+            just to see if I can get it to work right.
+        -   After that, we can try images.
 

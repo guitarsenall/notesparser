@@ -54,10 +54,6 @@ class HTMLRenderer(Handler):
         print '>',
     def end_LongURLLine(self):
         pass
-    def start_LongURLParent(self):
-        print '>',
-    def end_LongURLParent(self):
-        pass
     def start_title(self):
         print '<h1>'
     def end_title(self):

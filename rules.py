@@ -68,38 +68,33 @@ class ListRule(ListItemRule):
 
 class LongURLLineRule(Rule):
     """
-    A Long URL Line is a line inside a URL that is indented further
-    than the parent line.
+    A Long URL Line begins with 'http' or occurs inside a URL.
+    It is inside a URL if it is indented further than the first URL line.
     """
-    type = 'LongURLLine'
+    type            = 'LongURLLine'
+    inside          = False
+    ParentIndent    = 0
+    FullURL         = []
     def condition(self, block):
-        print self.type + ' condition called'
-        return leadingspaces(block) > ParentIndent
-    def action(self, block, handler):
-        handler.start(self.type)
-        handler.feed(block)
-        handler.end(self.type)
-        return True
-
-class LongURLParentRule(LongURLLineRule):
-    """
-    A Long URL Parent Line is a paragraph that begins with 'http'
-    """
-    type = 'LongURLParent'
-    inside = False
-    ParentIndent = 0
-    def condition(self, block):
-        print self.type + ' condition called'
-        return block.strip()[0:4].lower() == 'http'
+        BeganURL    = block.strip()[0:4].lower() == 'http'
+        ContinueURL = self.inside and leadingspaces(block) > self.ParentIndent
+        return BeganURL or ContinueURL
     def action(self, block, handler):
         if not self.inside:
-            ParentIndent = leadingspaces(block)
+            self.ParentIndent = leadingspaces(block)
             handler.start(self.type)
+            handler.feed(block)
+            self.FullURL.append( block.strip() )
             self.inside = True
-        elif self.inside and leadingspaces(block) <= ParentIndent:
-            handler.end(self.type)
-            self.inside = False
-        return False
+        elif self.inside:
+            if leadingspaces(block) > self.ParentIndent:
+                handler.start(self.type)
+                handler.feed(block)
+                self.FullURL.append( block.strip() )
+            else:   # no longer in URL
+                handler.end(self.type)
+                self.inside = False
+        return True
 
 class ParagraphRule(Rule):
     """
