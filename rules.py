@@ -77,23 +77,29 @@ class LongURLLineRule(Rule):
     FullURL         = []
     def condition(self, block):
         BeganURL    = block.strip()[0:4].lower() == 'http'
-        ContinueURL = self.inside and leadingspaces(block) > self.ParentIndent
+        ContinueURL = self.inside #and leadingspaces(block) > self.ParentIndent
         return BeganURL or ContinueURL
     def action(self, block, handler):
         if not self.inside:
             self.ParentIndent = leadingspaces(block)
             handler.start(self.type)
-            handler.feed(block)
+            #handler.feed(block)
             self.FullURL.append( block.strip() )
             self.inside = True
         elif self.inside:
             if leadingspaces(block) > self.ParentIndent:
                 handler.start(self.type)
-                handler.feed(block)
+                #handler.feed(block)
                 self.FullURL.append( block.strip() )
             else:   # no longer in URL
+                #print 'calling ' + 'writeout_' + self.type
+                handler.callback( 'writeout_', self.type,
+                                  self.FullURL,
+                                  self.ParentIndent )
+                self.FullURL = []
                 handler.end(self.type)
                 self.inside = False
+                return False
         return True
 
 class ParagraphRule(Rule):

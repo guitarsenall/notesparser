@@ -51,9 +51,12 @@ class HTMLRenderer(Handler):
     def end_listitem(self):
         print '</li>'
     def start_LongURLLine(self):
-        print '>',
+        pass    #print '$',
     def end_LongURLLine(self):
         pass
+    def writeout_LongURLLine(self, longurl, indent):
+        print indent*' ' + ( '<a href="%s">%s...</a>' %
+                             ( ''.join(longurl), longurl[0] ) )
     def start_title(self):
         print '<h1>'
     def end_title(self):
