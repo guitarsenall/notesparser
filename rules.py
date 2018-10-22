@@ -1,3 +1,5 @@
+from util import *
+
 class Rule:
     """
     Base class for all rules.
@@ -15,6 +17,7 @@ class HeadingRule(Rule):
     """
     type = 'heading'
     def condition(self, block):
+        #print self.type + ' condition called'
         return not '\n' in block and len(block) <= 70 and not block[-1] == ':'
 
 class TitleRule(HeadingRule):
@@ -59,6 +62,41 @@ class ListRule(ListItemRule):
             handler.start(self.type)
             self.inside = True
         elif self.inside and not ListItemRule.condition(self, block):
+            handler.end(self.type)
+            self.inside = False
+        return False
+
+class LongURLLineRule(Rule):
+    """
+    A Long URL Line is a line inside a URL that is indented further
+    than the parent line.
+    """
+    type = 'LongURLLine'
+    def condition(self, block):
+        print self.type + ' condition called'
+        return leadingspaces(block) > ParentIndent
+    def action(self, block, handler):
+        handler.start(self.type)
+        handler.feed(block)
+        handler.end(self.type)
+        return True
+
+class LongURLParentRule(LongURLLineRule):
+    """
+    A Long URL Parent Line is a paragraph that begins with 'http'
+    """
+    type = 'LongURLParent'
+    inside = False
+    ParentIndent = 0
+    def condition(self, block):
+        print self.type + ' condition called'
+        return block.strip()[0:4].lower() == 'http'
+    def action(self, block, handler):
+        if not self.inside:
+            ParentIndent = leadingspaces(block)
+            handler.start(self.type)
+            self.inside = True
+        elif self.inside and leadingspaces(block) <= ParentIndent:
             handler.end(self.type)
             self.inside = False
         return False

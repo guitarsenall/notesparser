@@ -28,4 +28,8 @@ NotesParser
 
                                         Thursday, October 18, 2018 (11:07 AM)
     *   More fake notes...
+        -   Try a long URL:
+                    https://stackoverflow.com/questions/14620863
+                        /git-add-all-subdirectories
+
 

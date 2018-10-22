@@ -10,3 +10,9 @@ def blocks(file):
         elif block:
             yield ''.join(block)    # .strip()
             block = []
+
+def leadingspaces(line):
+    # count leading spaces in a line
+    return len(line) - len(line.lstrip(' '))
+
+

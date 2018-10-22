@@ -50,6 +50,14 @@ class HTMLRenderer(Handler):
         print '<li>'
     def end_listitem(self):
         print '</li>'
+    def start_LongURLLine(self):
+        print '>',
+    def end_LongURLLine(self):
+        pass
+    def start_LongURLParent(self):
+        print '>',
+    def end_LongURLParent(self):
+        pass
     def start_title(self):
         print '<h1>'
     def end_title(self):
@@ -61,4 +69,4 @@ class HTMLRenderer(Handler):
     def sub_mail(self, match):
         return '<a href="mailto:%s">%s</a>' % (match.group(1), match.group(1))
     def feed(self, data):
-        print data
+        print data,
