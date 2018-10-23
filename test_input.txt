@@ -33,4 +33,8 @@ NotesParser
                         /git-add-all-subdirectories
             just to see if I can get it to work right.
         -   After that, we can try images.
+                                        Tuesday, October 23, 2018 (9:45 AM)
+        -   And here is a PNG image file
+                see github_repository_a.png
+            to add to the JPG above.
 
