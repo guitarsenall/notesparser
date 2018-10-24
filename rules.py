@@ -66,6 +66,28 @@ class ListRule(ListItemRule):
             self.inside = False
         return False
 
+class ImageFileRule(Rule):
+    """
+    An image-file line contains an image filename.
+    """
+    type    = 'imagefile'
+    def __init__(self, image_file_list):
+        self.image_file_names   = image_file_list
+    def condition(self, block):
+        ImageFound  = any( [block.find(fn) != -1 \
+                            for fn in self.image_file_names] )
+        return ImageFound
+    def action(self, block, handler):
+        handler.start(self.type)
+        for fn in self.image_file_names:
+            if block.find(fn) != -1:
+                fnlink  = '<A TARGET="_BLANK" HREF="%s">%s</A>' % (fn, fn)
+                newline = block.replace( fn, fnlink )
+                handler.feed(newline)
+                break
+        handler.end(self.type)
+        return True
+
 class LongURLLineRule(Rule):
     """
     A Long URL Line begins with 'http' or occurs inside a URL.

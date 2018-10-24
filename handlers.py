@@ -50,6 +50,10 @@ class HTMLRenderer(Handler):
         print '<li>'
     def end_listitem(self):
         print '</li>'
+    def start_imagefile(self):
+        pass
+    def end_imagefile(self):
+        pass
     def start_LongURLLine(self):
         pass    #print '$',
     def end_LongURLLine(self):

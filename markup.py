@@ -1,4 +1,4 @@
-import sys, re
+import sys, re, os
 from handlers import *
 from util import *
 from rules import *
@@ -37,19 +37,31 @@ class BasicTextParser(Parser):
     """
     def __init__(self, handler):
         Parser.__init__(self, handler)
-        #self.addRule(ListRule())
-        #self.addRule(ListItemRule())
-        self.addRule(TitleRule())
-        self.addRule(HeadingRule())
-        self.addRule(LongURLLineRule())
-        self.addRule(ParagraphRule())
 
+        self.addRule( TitleRule()       )
+        self.addRule( HeadingRule()     )
+        self.addRule( LongURLLineRule() )
+
+        # ImageFileRule comes after URL
+        directory   = os.getcwd()
+        extensions = ['jpg', 'bmp', 'png', 'gif']
+        self.image_file_names                                   \
+            = [ fn for fn in os.listdir(directory)              \
+                if any(fn.endswith(ext) for ext in extensions)  ]
+        self.addRule( ImageFileRule(self.image_file_names)  )
+
+        # paragraph rule is last and default
+        self.addRule( ParagraphRule() )
+
+        # filters
         self.addFilter(r'\*(.+?)\*', 'emphasis')
         #self.addFilter(r'(http://[\.a-zA-Z/]+)', 'url')
         #self.addFilter(r'(https?://[\.a-zA-Z/]+)', 'url')
         self.addFilter(r'([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z]+)', 'mail')
 
+        self.image_file_names   = []
+
+
 handler = HTMLRenderer()
 parser = BasicTextParser(handler)
-
 parser.parse(sys.stdin)
