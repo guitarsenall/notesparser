@@ -1,7 +1,7 @@
 
 # scratch.py
 
-# image filename processing
+# better image filename processing
 import os
 directory   = os.getcwd()
 extensions = ['jpg', 'bmp', 'png', 'gif']
@@ -15,7 +15,7 @@ for fn in image_file_names:
         newline = line.replace( fn, fnlink )
         print 'newline: ', newline
 
-
+# method of obtaining list of image files
 #import os
 #directory   = os.getcwd()
 #jpg_files   = []
