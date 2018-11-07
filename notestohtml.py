@@ -23,10 +23,7 @@ def load(event):
     #    file.close()
 
     # Create the dialog. In this case the current directory is forced as the starting
-    # directory for the dialog, and no default file name is forced. This can easilly
-    # be changed in your program. This is an 'open' dialog, and allows multitple
-    # file selections as well.
-    #
+    # directory for the dialog, and no default file name is forced.
     # Finally, if the directory is changed in the process of getting files, this
     # dialog is set up to change the current working directory to the path chosen.
     dlg = wx.FileDialog(
@@ -48,10 +45,13 @@ def load(event):
         filename.SetValue( paths[0] )
 
     # Compare this with the debug above; did we change working dirs?
-    contents.SetValue("CWD: %s\n" % os.getcwd())
+    OutStr = [ "CWD: %s" % os.getcwd() ]
+    (head, tail) = os.path.split(paths[0])
+    OutStr.append( 'PATH: %s' % head )
+    OutStr.append( 'FILE: %s' % tail )
+    contents.SetValue( '\n'.join(OutStr) )
 
-    # Destroy the dialog. Don't do this until you are done with it!
-    # BAD things can happen otherwise!
+    # Destroy the dialog.
     dlg.Destroy()
 
 
