@@ -48,6 +48,7 @@ def load(event):
         OutStr.append( 'FILE: %s' % tail )
         contents.SetValue( '\n'.join(OutStr) )
         filename.SetValue( tail )
+        win.SetStatusText(os.getcwd(), number=0)
 
     # Destroy the dialog.
     dlg.Destroy()
@@ -60,6 +61,10 @@ def save(event):
 
 app = wx.App()
 win = wx.Frame(None, title="Simple Editor", size=(410, 335))
+
+stBar   = win.CreateStatusBar(number=1, style=wx.STB_DEFAULT_STYLE, id=-1,
+                                name='stBar')
+win.SetStatusText(os.getcwd(), number=0)
 
 bkg = wx.Panel(win)
 
