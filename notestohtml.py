@@ -10,8 +10,8 @@ import os
 
 # This is how you pre-establish a file filter so that the dialog
 # only shows the extension(s) you want it to.
-wildcard = "Python source (*.py)|*.py|"     \
-           "Text files (*.txt)|*.txt|" \
+wildcard = "Text files (*.txt)|*.txt|" \
+           "Python source (*.py)|*.py|"     \
            "All files (*.*)|*.*"
 
 #---------------------------------------------------------------------------
@@ -42,14 +42,12 @@ def load(event):
         # This returns a Python list of files that were selected.
         paths = dlg.GetPaths()
         #contents.SetValue('You selected %d files:' % len(paths))
-        filename.SetValue( paths[0] )
-
-    # Compare this with the debug above; did we change working dirs?
-    OutStr = [ "CWD: %s" % os.getcwd() ]
-    (head, tail) = os.path.split(paths[0])
-    OutStr.append( 'PATH: %s' % head )
-    OutStr.append( 'FILE: %s' % tail )
-    contents.SetValue( '\n'.join(OutStr) )
+        OutStr = [ "CWD: %s" % os.getcwd() ]
+        (head, tail) = os.path.split(paths[0])
+        OutStr.append( 'PATH: %s' % head )
+        OutStr.append( 'FILE: %s' % tail )
+        contents.SetValue( '\n'.join(OutStr) )
+        filename.SetValue( tail )
 
     # Destroy the dialog.
     dlg.Destroy()
@@ -65,6 +63,9 @@ win = wx.Frame(None, title="Simple Editor", size=(410, 335))
 
 bkg = wx.Panel(win)
 
+notesText   = wx.StaticText(bkg, label="Select the notes file.")
+
+
 loadButton = wx.Button(bkg, label='Open')
 loadButton.Bind(wx.EVT_BUTTON, load)
 
@@ -74,13 +75,17 @@ saveButton.Bind(wx.EVT_BUTTON, save)
 filename = wx.TextCtrl(bkg)
 contents = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
 
-hbox = wx.BoxSizer()
-hbox.Add(filename, proportion=1, flag=wx.EXPAND)
-hbox.Add(loadButton, proportion=0, flag=wx.LEFT, border=5)
-hbox.Add(saveButton, proportion=0, flag=wx.LEFT, border=5)
+hBox1 = wx.BoxSizer()
+hBox1.Add(notesText, proportion=1, flag=wx.EXPAND)
+
+hBox2 = wx.BoxSizer()
+hBox2.Add(filename, proportion=1, flag=wx.EXPAND)
+hBox2.Add(loadButton, proportion=0, flag=wx.LEFT, border=5)
+hBox2.Add(saveButton, proportion=0, flag=wx.LEFT, border=5)
 
 vbox = wx.BoxSizer(wx.VERTICAL)
-vbox.Add(hbox, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox1, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox2, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(contents, proportion=1,
          flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
