@@ -43,12 +43,15 @@ def load(event):
         paths = dlg.GetPaths()
         #contents.SetValue('You selected %d files:' % len(paths))
         OutStr = [ "CWD: %s" % os.getcwd() ]
-        (head, tail) = os.path.split(paths[0])
+        (head, NotesFN) = os.path.split(paths[0])
         OutStr.append( 'PATH: %s' % head )
-        OutStr.append( 'FILE: %s' % tail )
+        OutStr.append( 'FILE: %s' % NotesFN )
         ContentsCtl.SetValue( '\n'.join(OutStr) )
-        FileNameCtl.SetValue( tail )
+        FileNameCtl.SetValue( NotesFN )
         win.SetStatusText(os.getcwd(), number=0)
+        prefix = NotesFN.split('.')[0]
+        NotesHtmlFN = prefix + '.html'
+        HTMLNotesNameCtl.SetValue( NotesHtmlFN )
 
     # Destroy the dialog.
     dlg.Destroy()
