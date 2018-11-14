@@ -105,13 +105,11 @@ class LongURLLineRule(Rule):
         if not self.inside:
             self.ParentIndent = leadingspaces(block)
             handler.start(self.type)
-            #handler.feed(block)
             self.FullURL.append( block.strip() )
             self.inside = True
         elif self.inside:
             if leadingspaces(block) > self.ParentIndent:
                 handler.start(self.type)
-                #handler.feed(block)
                 self.FullURL.append( block.strip() )
             else:   # no longer in URL
                 #print 'calling ' + 'writeout_' + self.type

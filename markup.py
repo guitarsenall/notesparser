@@ -30,6 +30,7 @@ class Parser:
                     if last: break
         self.handler.end('document')
 
+
 class BasicTextParser(Parser):
     """
     A specific Parser that adds rules and filters in its
@@ -62,6 +63,7 @@ class BasicTextParser(Parser):
         self.image_file_names   = []
 
 
-handler = HTMLRenderer()
+handler = HTMLFileRenderer('test_output.html')
 parser = BasicTextParser(handler)
-parser.parse(sys.stdin)
+with open('test_input.txt', 'r' ) as InputFile:
+    parser.parse(InputFile)
