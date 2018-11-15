@@ -93,6 +93,7 @@ class HTMLFileRenderer(Handler):
         self.HTMLFile   = open(HTMLFileName, 'w')
     def CloseHTMLFile(self):
         self.HTMLFile.close()
+        print self.HTMLFileName + ' closed'
     def start_document(self):
         self.HTMLFile.write( '<html><head><title>...</title></head><body><PRE>')
     def end_document(self):
