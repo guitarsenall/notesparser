@@ -135,6 +135,19 @@ def load(event):
 def WriteHTMLNotesFile(event):
     NotesHtmlFN = HTMLNotesNameCtl.GetValue()
     print 'write button called with ' + NotesHtmlFN
+    if os.path.exists(NotesHtmlFN):
+        dlg = wx.MessageDialog(win,
+                    'Output file exists! Do you want to overwrite?',
+                    'WARNING',
+                    wx.OK | wx.CANCEL | wx.ICON_EXCLAMATION
+                    )
+        if dlg.ShowModal() != wx.ID_OK:
+            print 'wx.OK not chosen'
+            dlg.Destroy()
+            return
+        print 'wx.OK chosen'
+        dlg.Destroy()
+    print 'processing file'
     handler = HTMLFileRenderer( NotesHtmlFN )
     parser = BasicTextParser(handler)
     with open('test_input.txt', 'r' ) as InputFile:
