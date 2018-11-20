@@ -135,6 +135,10 @@ def load(event):
 def WriteHTMLNotesFile(event):
     NotesHtmlFN = HTMLNotesNameCtl.GetValue()
     print 'write button called with ' + NotesHtmlFN
+    print 'HTMLTitle: ' + HTMLTitleCtl.GetValue()
+    SortSchemeChoice = SortSchemeCtl.GetSelection()
+    SortSchemeChoice = SortSchemeCtl.GetString(SortSchemeChoice)
+    print 'sorting scheme choice: ' + SortSchemeChoice
     if os.path.exists(NotesHtmlFN):
         dlg = wx.MessageDialog(win,
                     'Output file exists! Do you want to overwrite?',
@@ -166,6 +170,7 @@ notesText   = wx.StaticText(bkg, label="Select the notes file.")
 hBox1 = wx.BoxSizer()
 hBox1.Add(notesText, proportion=1, flag=wx.EXPAND)
 
+# notes input filename
 FileNameCtl = wx.TextCtrl(bkg)
 loadButton = wx.Button(bkg, label='Open')
 loadButton.Bind(wx.EVT_BUTTON, load)
@@ -173,17 +178,45 @@ hBox2 = wx.BoxSizer()
 hBox2.Add(FileNameCtl, proportion=1, flag=wx.EXPAND)
 hBox2.Add(loadButton, proportion=0, flag=wx.LEFT, border=5)
 
+# outputs separator line
 SeparatorText   = wx.StaticText(bkg, label = \
     "-------------------- outputs ---------------------")
 hBox3 = wx.BoxSizer()
 hBox3.Add(SeparatorText, proportion=1, flag=wx.EXPAND)
 
+# HTML notes filename
 HTMLNotesNameCtl = wx.TextCtrl(bkg)
 saveButton = wx.Button(bkg, label='WRITE HTML')
 saveButton.Bind(wx.EVT_BUTTON, WriteHTMLNotesFile)
 hBox4 = wx.BoxSizer()
 hBox4.Add(HTMLNotesNameCtl, proportion=1, flag=wx.EXPAND)
 hBox4.Add(saveButton, proportion=0, flag=wx.LEFT, border=5)
+
+#HTML Page Title
+HTMLTitleTxt    = wx.StaticText(bkg, label = 'HTML Page Title:')
+HTMLTitleCtl    = wx.TextCtrl(bkg, value='Default Page Title')
+hBox5 = wx.BoxSizer()
+hBox5.Add(HTMLTitleTxt, proportion=0, flag=wx.RIGHT, border=5)
+hBox5.Add(HTMLTitleCtl, proportion=1, flag=wx.EXPAND)
+
+#Sorting Scheme
+SortSchemeTxt = wx.StaticText(bkg, label = "Index Sorting Scheme:" )
+SortSchemeCtl = wx.Choice(bkg,
+                        choices = ['alphabetical', 'creation date'])
+SortSchemeCtl.SetSelection(1)
+def SortEventChoice(event):
+    print 'SortEventChoice: %s\n' % event.GetString()
+bkg.Bind(wx.EVT_CHOICE, SortEventChoice, SortSchemeCtl)
+hBox6 = wx.BoxSizer()
+hBox6.Add(SortSchemeTxt, proportion=0, flag=wx.RIGHT, border=5)
+hBox6.Add(SortSchemeCtl, proportion=0, flag=wx.EXPAND)
+
+#Max Image Width and Max Image Height
+
+
+#Behavior If Files Exist
+
+
 
 ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
 
@@ -193,6 +226,8 @@ vbox.Add(hBox1, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox2, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox3, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox4, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox5, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox6, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(ContentsCtl, proportion=1,
          flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
