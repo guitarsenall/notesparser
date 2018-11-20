@@ -136,6 +136,8 @@ def WriteHTMLNotesFile(event):
     NotesHtmlFN = HTMLNotesNameCtl.GetValue()
     print 'write button called with ' + NotesHtmlFN
     print 'HTMLTitle: ' + HTMLTitleCtl.GetValue()
+    print 'max image width & height: %s, %s' % \
+        ( MaxImageWidthCtl.GetValue(), MaxImageHeightCtl.GetValue() )
     SortSchemeChoice = SortSchemeCtl.GetSelection()
     SortSchemeChoice = SortSchemeCtl.GetString(SortSchemeChoice)
     print 'sorting scheme choice: ' + SortSchemeChoice
@@ -158,7 +160,7 @@ def WriteHTMLNotesFile(event):
         parser.parse(InputFile)
 
 app = wx.App()
-win = wx.Frame(None, title="Notes to HTML", size=(600, 335))
+win = wx.Frame(None, title="Notes to HTML", size=(600, 400))
 
 stBar   = win.CreateStatusBar(number=1, style=wx.STB_DEFAULT_STYLE, id=-1,
                                 name='stBar')
@@ -212,6 +214,18 @@ hBox6.Add(SortSchemeTxt, proportion=0, flag=wx.RIGHT, border=5)
 hBox6.Add(SortSchemeCtl, proportion=0, flag=wx.EXPAND)
 
 #Max Image Width and Max Image Height
+import wxtextvalidators as tv
+MaxImageWidthTxt    = wx.StaticText(bkg, label = 'Max Image Width:')
+MaxImageWidthCtl    = wx.TextCtrl(bkg, value='2000',
+                            validator = tv.MyValidator(tv.DIGIT_ONLY) )
+MaxImageHeightTxt   = wx.StaticText(bkg, label = 'Max Image Height:')
+MaxImageHeightCtl   = wx.TextCtrl(bkg, value='2000',
+                            validator = tv.MyValidator(tv.DIGIT_ONLY) )
+hBox7 = wx.BoxSizer()
+hBox7.Add(MaxImageWidthTxt, proportion=0, flag=wx.RIGHT, border=5)
+hBox7.Add(MaxImageWidthCtl, proportion=1, flag=wx.EXPAND | wx.RIGHT, border=5)
+hBox7.Add(MaxImageHeightTxt, proportion=0, flag=wx.RIGHT, border=5)
+hBox7.Add(MaxImageHeightCtl, proportion=1, flag=wx.EXPAND | wx.RIGHT, border=5)
 
 
 #Behavior If Files Exist
@@ -228,6 +242,7 @@ vbox.Add(hBox3, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox4, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox5, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox6, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox7, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(ContentsCtl, proportion=1,
          flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
