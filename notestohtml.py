@@ -141,6 +141,9 @@ def WriteHTMLNotesFile(event):
     SortSchemeChoice = SortSchemeCtl.GetSelection()
     SortSchemeChoice = SortSchemeCtl.GetString(SortSchemeChoice)
     print 'sorting scheme choice: ' + SortSchemeChoice
+    BehaviorChoice  = BehaviorCtl.GetSelection()
+    BehaviorChoice  = BehaviorCtl.GetString(BehaviorChoice)
+    print 'behavior choice: ' + BehaviorChoice
     if os.path.exists(NotesHtmlFN):
         dlg = wx.MessageDialog(win,
                     'Output file exists! Do you want to overwrite?',
@@ -227,14 +230,19 @@ hBox7.Add(MaxImageWidthCtl, proportion=1, flag=wx.EXPAND | wx.RIGHT, border=5)
 hBox7.Add(MaxImageHeightTxt, proportion=0, flag=wx.RIGHT, border=5)
 hBox7.Add(MaxImageHeightCtl, proportion=1, flag=wx.EXPAND | wx.RIGHT, border=5)
 
-
 #Behavior If Files Exist
+BehaviorTxt = wx.StaticText(bkg, label = "Behavior if Output Exists:" )
+BehaviorCtl = wx.Choice(bkg,
+                        choices = ['warning', 'overwrite'])
+BehaviorCtl.SetSelection(0)
+def BehaviorEventChoice(event):
+    print 'BehaviorEventChoice: %s\n' % event.GetString()
+bkg.Bind( wx.EVT_CHOICE, BehaviorEventChoice, BehaviorCtl )
+hBox8 = wx.BoxSizer()
+hBox8.Add(BehaviorTxt, proportion=0, flag=wx.RIGHT, border=5)
+hBox8.Add(BehaviorCtl, proportion=0, flag=wx.EXPAND)
 
-
-
-ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
-
-
+# vertical box sizer
 vbox = wx.BoxSizer(wx.VERTICAL)
 vbox.Add(hBox1, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox2, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
@@ -243,6 +251,8 @@ vbox.Add(hBox4, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox5, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox6, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox7, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox8, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
 vbox.Add(ContentsCtl, proportion=1,
          flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
