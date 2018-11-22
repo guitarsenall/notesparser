@@ -71,7 +71,38 @@ class BasicTextParser(Parser):
         #self.addFilter(r'(https?://[\.a-zA-Z/]+)', 'url')
         self.addFilter(r'([\.a-zA-Z]+@[\.a-zA-Z]+[a-zA-Z]+)', 'mail')
 
-        self.image_file_names   = []
+        # self.image_file_names   = []
+
+    def BuildHTMLIndex(self, Title):
+        '''
+        WARNING: This overwrites HTML files index.html, contents.html,
+        and others with the prefixes matches the image files in
+        self.image_file_names.
+        '''
+
+        # build the main page
+        with open('index.html', 'w' ) as IndexFile:
+            IndexFile.write( '<html>\n'                                       )
+            IndexFile.write( '<head>\n'                                       )
+            IndexFile.write( '<meta name="GENERATOR" content="PV-WAVE">\n'    )
+            IndexFile.write( '<title>' + Title + '</title>\n'                 )
+            IndexFile.write( '</head>\n'                                      )
+            IndexFile.write( '<frameset cols="150,*">\n'                      )
+            IndexFile.write( '  <frame name="contents" ' +\
+                             'target="main" src="contents.htm">\n'            )
+            IndexFile.write( '  <frame name="main">\n'                        )
+            IndexFile.write( '  <noframes>\n'                                 )
+            IndexFile.write( '  <body>\n'                                     )
+            IndexFile.write( '  <p>This page uses frames, '  + \
+                             'but your browser does not support them.</p>\n'  )
+            IndexFile.write( '  </body>\n'                                    )
+            IndexFile.write( '  </noframes>\n'                                )
+            IndexFile.write( '</frameset>\n'                                  )
+            IndexFile.write( '</html>\n'                                      )
+
+
+
+
 
 ################################################################################
 ################################################################################
@@ -86,7 +117,6 @@ import wx
 # This is how you pre-establish a file filter so that the dialog
 # only shows the extension(s) you want it to.
 wildcard = "Text files (*.txt)|*.txt|"  \
-           "Python source (*.py)|*.py|" \
            "All files (*.*)|*.*"
 
 #---------------------------------------------------------------------------
@@ -121,7 +151,9 @@ def load(event):
         (head, NotesFN) = os.path.split(paths[0])
         OutStr.append( 'PATH: %s' % head )
         OutStr.append( 'FILE: %s' % NotesFN )
-        ContentsCtl.SetValue( '\n'.join(OutStr) )
+        # ContentsCtl.SetValue( '\n'.join(OutStr) )
+        for s in OutStr:
+            print s  #OutStr
         FileNameCtl.SetValue( NotesFN )
         win.SetStatusText(os.getcwd(), number=0)
         prefix = NotesFN.split('.')[0]
@@ -144,9 +176,13 @@ def WriteHTMLNotesFile(event):
     BehaviorChoice  = BehaviorCtl.GetSelection()
     BehaviorChoice  = BehaviorCtl.GetString(BehaviorChoice)
     print 'behavior choice: ' + BehaviorChoice
-    if os.path.exists(NotesHtmlFN):
+    if (   os.path.exists(NotesHtmlFN)          \
+        or os.path.exists('index.html')         \
+        or os.path.exists('contents.html') )    \
+      and BehaviorChoice == 'warning':
         dlg = wx.MessageDialog(win,
-                    'Output file exists! Do you want to overwrite?',
+                    'One or more output files exists!\n' + \
+                    'Do you want to overwrite?',
                     'WARNING',
                     wx.OK | wx.CANCEL | wx.ICON_EXCLAMATION
                     )
@@ -161,6 +197,7 @@ def WriteHTMLNotesFile(event):
     parser = BasicTextParser(handler)
     with open('test_input.txt', 'r' ) as InputFile:
         parser.parse(InputFile)
+    parser.BuildHTMLIndex( HTMLTitleCtl.GetValue() )
 
 app = wx.App()
 win = wx.Frame(None, title="Notes to HTML", size=(600, 400))
@@ -252,9 +289,9 @@ vbox.Add(hBox5, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox6, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox7, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox8, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
-vbox.Add(ContentsCtl, proportion=1,
-         flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
+#ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
+#vbox.Add(ContentsCtl, proportion=1,
+#         flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
 
 bkg.SetSizer(vbox)
 win.Show()
