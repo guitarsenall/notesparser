@@ -76,7 +76,7 @@ class BasicTextParser(Parser):
     def BuildHTMLIndex(self, Title):
         '''
         WARNING: This overwrites HTML files index.html, contents.html,
-        and others with the prefixes matches the image files in
+        and others with the prefixes matching the image files in
         self.image_file_names.
         '''
 
@@ -89,7 +89,7 @@ class BasicTextParser(Parser):
             IndexFile.write( '</head>\n'                                      )
             IndexFile.write( '<frameset cols="150,*">\n'                      )
             IndexFile.write( '  <frame name="contents" ' +\
-                             'target="main" src="contents.htm">\n'            )
+                             'target="main" src="contents.html">\n'           )
             IndexFile.write( '  <frame name="main">\n'                        )
             IndexFile.write( '  <noframes>\n'                                 )
             IndexFile.write( '  <body>\n'                                     )
@@ -100,6 +100,102 @@ class BasicTextParser(Parser):
             IndexFile.write( '</frameset>\n'                                  )
             IndexFile.write( '</html>\n'                                      )
 
+
+        # build the contents page
+        with open('contents.html', 'w') as ContentsFile:
+
+            #   print header
+            ContentsFile.write( '<html>\n' )
+            ContentsFile.write( '<head>\n' )
+            ContentsFile.write( '<title>'+Title+'</title>\n' )
+            ContentsFile.write( '<meta name="GENERATOR" content="PV-WAVE">\n' )
+            ContentsFile.write( '<meta name="Microsoft Border" content="none">\n' )
+            ContentsFile.write( '<base target="main">\n' )
+            ContentsFile.write( '</head>\n' )
+            ContentsFile.write( '<body>\n' )
+
+            # # index HTML notes first
+            # ContentsFile.write( '<p><a href="' + OutputFile + $
+            #     '" target="main">'+tok(0)+'</a></p>'
+
+            #   build each page
+            nPages  = len(self.image_file_names)
+            print 'reading images',
+            for i, IFileName in zip( range(nPages), self.image_file_names ):
+
+                prefix  = IFileName.split('.')[0]
+                HFileName   = prefix + '.html'
+
+#                # try to figure out if we have an image
+#                IF (WHERE( (suffix(i) EQ image_suffixes)))(0) NE -1 THEN BEGIN
+#                    # read the image to get the dimensions. Trap error.
+#                    ON_ERROR, 3, /continue
+#                    image   = IMAGE_READ( images(i) )
+#                    ON_ERROR, 2
+#                    IF N_ELEMENTS(image) EQ 0      $
+#                    THEN BadImage = 1              $
+#                    ELSE IF image('status') NE 0   $
+#                         THEN BadImage = 1         $
+#                         ELSE BadImage = 0
+#                ENDIF ELSE BadImage = 1
+#
+#                IF BadImage THEN BEGIN
+#
+#                    IF images(i) NE NotesFile THEN BEGIN
+#                        # skip notes file, assume text file
+#                        ContentsFile.write( '<p><a href="' + images(i) + $
+#                            '" target="main">'+images(i)+'</a></p>'
+#                    ENDIF
+#
+#                ENDIF ELSE BEGIN ; good image file
+
+                ContentsFile.write( '<p><a href="' + HFileName + '"' +
+                    ' target="main">'+IFileName+'</a></p>\n' )
+
+#                w       = image('width')
+#                h       = image('height')
+#
+#                # shrink display size if necessary
+#                IF w GT MaxWidth THEN BEGIN
+#                    h   = LONG( h * FLOAT(MaxWidth)/w )
+#                    w   = MaxWidth
+#                ENDIF
+#                IF h GT MaxHeight THEN BEGIN
+#                    w   = LONG( w * FLOAT(MaxHeight)/h )
+#                    h   = MaxHeight
+#                ENDIF
+#
+#                wStr    = STRTRIM( w, 2 )
+#                hStr    = STRTRIM( h, 2 )
+
+                wStr    = '2000'
+                hStr    = '2000'
+
+                # generate the html file
+#                IF Behavior EQ 'Error' THEN BEGIN
+#                    IF (FINDFILE(HFileName))(0) NE '' THEN MESSAGE, $
+#                        HFileName + ' exists and Behavior = Error'
+#                ENDIF
+                with open(HFileName, 'w') as ImageHFile:
+                    ImageHFile.write( '<html>\n' )
+                    ImageHFile.write( '<head>\n' )
+                    ImageHFile.write( '<title>'+Title+'</title>\n' )
+                    ImageHFile.write( '</head>\n' )
+                    ImageHFile.write( '<body>\n' )
+                    ImageHFile.write( '<p><img src="'+IFileName+'"' +
+                                 ' width="'+wStr +'" height="'+hStr+'"\n' )
+                    ImageHFile.write( '    alt="'+IFileName+'"></p>\n' )
+                    ImageHFile.write( '</body>\n' )
+                    ImageHFile.write( '</html>\n' )
+
+                print '.', #format='(A,$)'
+            # endfor
+
+            print 'done'
+
+            # contents remainder
+            ContentsFile.write( '</body>\n' )
+            ContentsFile.write( '</html>\n' )
 
 
 
