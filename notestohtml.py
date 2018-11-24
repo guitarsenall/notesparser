@@ -80,6 +80,8 @@ class BasicTextParser(Parser):
         self.image_file_names.
         '''
 
+        from PIL import Image
+
         # build the main page
         with open('index.html', 'w' ) as IndexFile:
             IndexFile.write( '<html>\n'                                       )
@@ -126,50 +128,38 @@ class BasicTextParser(Parser):
                 prefix  = IFileName.split('.')[0]
                 HFileName   = prefix + '.html'
 
-#                # try to figure out if we have an image
-#                IF (WHERE( (suffix(i) EQ image_suffixes)))(0) NE -1 THEN BEGIN
-#                    # read the image to get the dimensions. Trap error.
-#                    ON_ERROR, 3, /continue
-#                    image   = IMAGE_READ( images(i) )
-#                    ON_ERROR, 2
-#                    IF N_ELEMENTS(image) EQ 0      $
-#                    THEN BadImage = 1              $
-#                    ELSE IF image('status') NE 0   $
-#                         THEN BadImage = 1         $
-#                         ELSE BadImage = 0
-#                ENDIF ELSE BadImage = 1
-#
-#                IF BadImage THEN BEGIN
-#
-#                    IF images(i) NE NotesFile THEN BEGIN
-#                        # skip notes file, assume text file
-#                        ContentsFile.write( '<p><a href="' + images(i) + $
-#                            '" target="main">'+images(i)+'</a></p>'
-#                    ENDIF
-#
-#                ENDIF ELSE BEGIN ; good image file
-
-                ContentsFile.write( '<p><a href="' + HFileName + '"' +
-                    ' target="main">'+IFileName+'</a></p>\n' )
-
-#                w       = image('width')
-#                h       = image('height')
-#
-#                # shrink display size if necessary
-#                IF w GT MaxWidth THEN BEGIN
-#                    h   = LONG( h * FLOAT(MaxWidth)/w )
-#                    w   = MaxWidth
-#                ENDIF
-#                IF h GT MaxHeight THEN BEGIN
-#                    w   = LONG( w * FLOAT(MaxHeight)/h )
-#                    h   = MaxHeight
-#                ENDIF
-#
-#                wStr    = STRTRIM( w, 2 )
-#                hStr    = STRTRIM( h, 2 )
-
-                wStr    = '2000'
-                hStr    = '2000'
+                # try to figure out if we have an image by reading
+                # the image to get the dimensions. Trap error.
+                try:
+                    BadImage = False
+                    img = Image.open(IFileName)
+                except IOError:
+                    BadImage = True
+                    #IF images(i) NE NotesFile THEN BEGIN
+                    # skip notes file, assume text file
+                    ContentsFile.write( '<p><a href="' + IFileName +
+                        '" target="main">' + IFileName + '</a></p>\n' )
+                except:
+                    print 'unknown error opening image ' + IFileName, \
+                        sys.exc_info()[0]
+                    raise
+                else:   # good image file
+                    ContentsFile.write( '<p><a href="' + HFileName + '"' +
+                        ' target="main">' + IFileName + '</a></p>\n' )
+                    w, h = img.size
+                    # shrink display size if necessary
+                    MaxWidth    = int( MaxImageWidthCtl.GetValue() )
+                    MaxHeight   = int( MaxImageHeightCtl.GetValue() )
+                    if w <= MaxWidth and h <= MaxHeight:
+                        ScaleImage = False
+                    else:
+                        ScaleImage = True
+                        if w > MaxWidth:
+                            h   = int( h * float(MaxWidth)/w )
+                            w   = MaxWidth
+                        if h > MaxHeight:
+                            w   = int( w * FLOAT(MaxHeight)/h )
+                            h   = MaxHeight
 
                 # generate the html file
 #                IF Behavior EQ 'Error' THEN BEGIN
@@ -182,8 +172,11 @@ class BasicTextParser(Parser):
                     ImageHFile.write( '<title>'+Title+'</title>\n' )
                     ImageHFile.write( '</head>\n' )
                     ImageHFile.write( '<body>\n' )
-                    ImageHFile.write( '<p><img src="'+IFileName+'"' +
-                                 ' width="'+wStr +'" height="'+hStr+'"\n' )
+                    if ScaleImage:
+                        ImageHFile.write( '<p><img src="'+IFileName+'"' +
+                                     ' width="' + str(w) + '" height="' + str(h) + '"\n' )
+                    else:
+                        ImageHFile.write( '<p><img src="'+IFileName+'"\n' )
                     ImageHFile.write( '    alt="'+IFileName+'"></p>\n' )
                     ImageHFile.write( '</body>\n' )
                     ImageHFile.write( '</html>\n' )
