@@ -1,12 +1,22 @@
 
 # scratch.py
 
-# try redirecting STDOUT to a file
-import sys
-sys.stdout = open('stdout.txt','wt')
-print 'print statement'
-print 'statement with trailing comma',
-print ' to see if it continues'
+# experiment with file creation date
+import os
+files   = [ 'github_repository_a.png',
+            'beginning_python_cover_a.jpg' ]
+ctimes  = []
+for file in files:
+    ctimes.append( os.path.getctime(file) )
+print 'files: ', files
+print 'sorted: ', sorted(files, key=os.path.getctime)
+
+## try redirecting STDOUT to a file
+#import sys
+#sys.stdout = open('stdout.txt','wt')
+#print 'print statement'
+#print 'statement with trailing comma',
+#print ' to see if it continues'
 
 
 ## better image filename processing
