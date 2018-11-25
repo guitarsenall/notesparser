@@ -60,6 +60,7 @@ class BasicTextParser(Parser):
         self.image_file_names                                   \
             = [ fn for fn in os.listdir(directory)              \
                 if any(fn.endswith(ext) for ext in extensions)  ]
+        self.image_file_names.sort()    # alphabetical
         self.addRule( ImageFileRule(self.image_file_names)  )
 
         # paragraph rule is last and default
@@ -115,6 +116,15 @@ class BasicTextParser(Parser):
             ContentsFile.write( '<base target="main">\n' )
             ContentsFile.write( '</head>\n' )
             ContentsFile.write( '<body>\n' )
+
+            # sort based on SortSchemeCtl
+            SortSchemeChoice = SortSchemeCtl.GetSelection()
+            SortSchemeChoice = SortSchemeCtl.GetString(SortSchemeChoice)
+            print 'sorting images based on: ' + SortSchemeChoice
+            if SortSchemeChoice == 'creation date':
+                self.image_file_names.sort(key=os.path.getctime)
+            else:
+                self.image_file_names.sort()    # alphabetical
 
             # # index HTML notes first
             # ContentsFile.write( '<p><a href="' + OutputFile + $

@@ -9,7 +9,8 @@ ctimes  = []
 for file in files:
     ctimes.append( os.path.getctime(file) )
 print 'files: ', files
-print 'sorted: ', sorted(files, key=os.path.getctime)
+print 'ctime sorted: ', sorted(files, key=os.path.getctime)
+print 'alphabetical sorted: ', sorted(files)
 
 ## try redirecting STDOUT to a file
 #import sys
