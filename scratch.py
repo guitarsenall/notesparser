@@ -1,16 +1,31 @@
 
 # scratch.py
 
-# experiment with file creation date
-import os
-files   = [ 'github_repository_a.png',
-            'beginning_python_cover_a.jpg' ]
-ctimes  = []
-for file in files:
-    ctimes.append( os.path.getctime(file) )
-print 'files: ', files
-print 'ctime sorted: ', sorted(files, key=os.path.getctime)
-print 'alphabetical sorted: ', sorted(files)
+# Build list of all files but .html files
+import os, pprint
+os.chdir(r'D:\Users\Owner\Documents\OneDrive\2018\notesparser\notesparser\sampledata')
+directory   = os.getcwd()
+extensions = [ 'htm', 'html' ]
+image_file_names    = os.listdir(directory)
+old_file_names      = image_file_names[:]
+for fn in old_file_names:
+    if any( fn.endswith(ext) for ext in extensions):
+        image_file_names.remove(fn)
+image_file_names.sort(key=os.path.getctime)
+for fn in image_file_names:
+    print '%s, %s' % ( fn, os.path.getctime(fn) )
+#pprint.pprint( image_file_names )
+
+## experiment with file creation date
+#import os
+#files   = [ 'github_repository_a.png',
+#            'beginning_python_cover_a.jpg' ]
+#ctimes  = []
+#for file in files:
+#    ctimes.append( os.path.getctime(file) )
+#print 'files: ', files
+#print 'ctime sorted: ', sorted(files, key=os.path.getctime)
+#print 'alphabetical sorted: ', sorted(files)
 
 ## try redirecting STDOUT to a file
 #import sys

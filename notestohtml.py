@@ -56,10 +56,16 @@ class BasicTextParser(Parser):
 
         # ImageFileRule comes after URL
         directory   = os.getcwd()
-        extensions = ['jpg', 'bmp', 'png', 'gif']
-        self.image_file_names                                   \
-            = [ fn for fn in os.listdir(directory)              \
-                if any(fn.endswith(ext) for ext in extensions)  ]
+#        extensions = ['jpg', 'bmp', 'png', 'gif']
+#        self.image_file_names                                   \
+#            = [ fn for fn in os.listdir(directory)              \
+#                if any(fn.endswith(ext) for ext in extensions)  ]
+        extensions = [ 'htm', 'html' ]
+        self.image_file_names    = os.listdir(directory)
+        old_file_names      = self.image_file_names[:]
+        for fn in old_file_names:
+            if any( fn.endswith(ext) for ext in extensions):
+                self.image_file_names.remove(fn)
         self.image_file_names.sort()    # alphabetical
         self.addRule( ImageFileRule(self.image_file_names)  )
 
@@ -178,20 +184,20 @@ class BasicTextParser(Parser):
 #                    IF (FINDFILE(HFileName))(0) NE '' THEN MESSAGE, $
 #                        HFileName + ' exists and Behavior = Error'
 #                ENDIF
-                with open(HFileName, 'w') as ImageHFile:
-                    ImageHFile.write( '<html>\n' )
-                    ImageHFile.write( '<head>\n' )
-                    ImageHFile.write( '<title>'+Title+'</title>\n' )
-                    ImageHFile.write( '</head>\n' )
-                    ImageHFile.write( '<body>\n' )
-                    if ScaleImage:
-                        ImageHFile.write( '<p><img src="'+IFileName+'"' +
-                                     ' width="' + str(w) + '" height="' + str(h) + '"\n' )
-                    else:
-                        ImageHFile.write( '<p><img src="'+IFileName+'"\n' )
-                    ImageHFile.write( '    alt="'+IFileName+'"></p>\n' )
-                    ImageHFile.write( '</body>\n' )
-                    ImageHFile.write( '</html>\n' )
+                    with open(HFileName, 'w') as ImageHFile:
+                        ImageHFile.write( '<html>\n' )
+                        ImageHFile.write( '<head>\n' )
+                        ImageHFile.write( '<title>'+Title+'</title>\n' )
+                        ImageHFile.write( '</head>\n' )
+                        ImageHFile.write( '<body>\n' )
+                        if ScaleImage:
+                            ImageHFile.write( '<p><img src="'+IFileName+'"' +
+                                         ' width="' + str(w) + '" height="' + str(h) + '"\n' )
+                        else:
+                            ImageHFile.write( '<p><img src="'+IFileName+'"\n' )
+                        ImageHFile.write( '    alt="'+IFileName+'"></p>\n' )
+                        ImageHFile.write( '</body>\n' )
+                        ImageHFile.write( '</html>\n' )
 
                 print '.', #format='(A,$)'
             # endfor
@@ -268,6 +274,16 @@ def load(event):
 
 
 def WriteHTMLNotesFile(event):
+    InFileName  = FileNameCtl.GetValue()
+    if not os.path.exists(InFileName):
+        dlg = wx.MessageDialog(win,
+                    'A valid input file must be entered.',
+                    'WARNING',
+                    wx.OK | wx.ICON_INFORMATION
+                    )
+        dlg.ShowModal()
+        dlg.Destroy()
+        return
     NotesHtmlFN = HTMLNotesNameCtl.GetValue()
     print 'write button called with ' + NotesHtmlFN
     print 'HTMLTitle: ' + HTMLTitleCtl.GetValue()
@@ -298,7 +314,7 @@ def WriteHTMLNotesFile(event):
     print 'processing file'
     handler = HTMLFileRenderer( NotesHtmlFN )
     parser = BasicTextParser(handler)
-    with open('test_input.txt', 'r' ) as InputFile:
+    with open(InFileName, 'r' ) as InputFile:
         parser.parse(InputFile)
     parser.BuildHTMLIndex( HTMLTitleCtl.GetValue() )
 

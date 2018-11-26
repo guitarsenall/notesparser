@@ -11,7 +11,7 @@ NotesParser
         "Beginning Python" (Magnus Lie Hetland, 2nd edition).
                 see <A TARGET="_BLANK" HREF="beginning_python_cover_a.jpg">beginning_python_cover_a.jpg</A>
         -   The source code is available at
-                    <a href="http://www.apress.comhttp://www.apress.comhttp://www.apress.com">http://www.apress.com...</a>
+                    <a href="http://www.apress.com">http://www.apress.com</a>
             >   It offers the choice to "Use Git or checkout with SVN using
                 the web URL."
                     <a href="https://github.com/Apress/beg-python.git">https://github.com/Apress/beg-python.git</a>
@@ -21,7 +21,7 @@ NotesParser
                         \beg-python-master.zip\beg-python-master
                         \978-1-59059-982-2\Chapter20\
         -   According to the book, I run this at the command line with
-                D:\...> python markup.py < test_input.txt > test_output.html
+                D:\...> python markup.py < <A TARGET="_BLANK" HREF="test_input.txt">test_input.txt</A> > test_output.html
             IT WORKS!!
                                         Thursday, October 18, 2018 (11:00 AM)
         -   Some fake notes.
@@ -42,7 +42,7 @@ NotesParser
 +   Test creation-date sorting with an image index.
 
     *   Test the index (e.g., creation-date sorting) with an image index.
-        -   It is time to create a sampledata folder to contain test_input.txt
+        -   It is time to create a sampledata folder to contain <A TARGET="_BLANK" HREF="test_input.txt">test_input.txt</A>
             notes and images. That means I have to create the folder and
             move versioned files into it. Read help.
             >   Create the folder sampledata. Nothing special.
@@ -77,6 +77,24 @@ NotesParser
                 date. Right-drag them into sampledata and select
                 "GIT copy and add files to this WC"
             >   Commit and push.
+
+
++   Refinements
+    *   Move the "WRITE HTML" button to bottom. Add a CLOSE button next to it.
+        It works.
+        -   Commit and push.
+    *   Trap error if WRITE button is pressed with empty or invalid input file.
+        It works.
+            see notestohtml_gui_d.png
+    *   Support other files (txt, pdf, doc, xls, etc...).
+        -   To do this, I need to read all files in the directory and
+            eliminate .html files from the list. Experiment in scratch.py.
+            Tricky. I have to work with a copy of the file list while
+            deleting items from the original list. I think I've got it:
+        -   I should have a way to test it. Add a couple files:
+                <A TARGET="_BLANK" HREF="dummy.xlsx">dummy.xlsx</A>
+                <A TARGET="_BLANK" HREF="DummyDocument.docx">DummyDocument.docx</A>
+            Try it:
 
 
 

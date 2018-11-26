@@ -80,3 +80,21 @@ NotesParser
             >   Commit and push.
 
 
++   Refinements
+    *   Move the "WRITE HTML" button to bottom. Add a CLOSE button next to it.
+        It works.
+        -   Commit and push.
+    *   Trap error if WRITE button is pressed with empty or invalid input file.
+        It works.
+            see notestohtml_gui_d.png
+    *   Support other files (txt, pdf, doc, xls, etc...).
+        -   To do this, I need to read all files in the directory and
+            eliminate .html files from the list. Experiment in scratch.py.
+            Tricky. I have to work with a copy of the file list while
+            deleting items from the original list. I think I've got it:
+        -   I should have a way to test it. Add a couple files:
+                dummy.xlsx
+                DummyDocument.docx
+            Try it:
+
+
