@@ -8,6 +8,9 @@ Taken from the wxPython demo under
 '''
 
 import  string
+
+# wxPython GUI library
+#   c:\Python27>python -m pip install -U wxPython
 import  wx
 
 #----------------------------------------------------------------------

@@ -81,6 +81,8 @@ class BasicTextParser(Parser):
         self.image_file_names.
         '''
 
+        # Python Imaging Library (PIL) module
+        #   C:\>c:\Python27\Scripts\easy_install Pillow
         from PIL import Image
 
         # build the main page
@@ -209,6 +211,8 @@ class BasicTextParser(Parser):
 ################################################################################
 ################################################################################
 
+# wxPython GUI library
+#   c:\Python27>python -m pip install -U wxPython
 import wx
 
 #---------------------------------------------------------------------------
@@ -355,7 +359,7 @@ hBox6.Add(SortSchemeCtl, proportion=0, flag=wx.EXPAND)
 #Max Image Width and Max Image Height
 import wxtextvalidators as tv
 MaxImageWidthTxt    = wx.StaticText(bkg, label = 'Max Image Width:')
-MaxImageWidthCtl    = wx.TextCtrl(bkg, value='2000',
+MaxImageWidthCtl    = wx.TextCtrl(bkg, value='1300',
                             validator = tv.MyValidator(tv.DIGIT_ONLY) )
 MaxImageHeightTxt   = wx.StaticText(bkg, label = 'Max Image Height:')
 MaxImageHeightCtl   = wx.TextCtrl(bkg, value='2000',
