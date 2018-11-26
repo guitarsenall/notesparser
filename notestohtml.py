@@ -329,13 +329,16 @@ SeparatorText   = wx.StaticText(bkg, label = \
 hBox3 = wx.BoxSizer()
 hBox3.Add(SeparatorText, proportion=1, flag=wx.EXPAND)
 
+# output descriptor line
+OutDescText   = wx.StaticText(bkg, label = \
+    "Enter the output HTML notes file name:")
+hBox3a = wx.BoxSizer()
+hBox3a.Add(OutDescText, proportion=1, flag=wx.EXPAND)
+
 # HTML notes filename
 HTMLNotesNameCtl = wx.TextCtrl(bkg)
-saveButton = wx.Button(bkg, label='WRITE HTML')
-saveButton.Bind(wx.EVT_BUTTON, WriteHTMLNotesFile)
 hBox4 = wx.BoxSizer()
 hBox4.Add(HTMLNotesNameCtl, proportion=1, flag=wx.EXPAND)
-hBox4.Add(saveButton, proportion=0, flag=wx.LEFT, border=5)
 
 #HTML Page Title
 HTMLTitleTxt    = wx.StaticText(bkg, label = 'HTML Page Title:')
@@ -382,19 +385,30 @@ hBox8 = wx.BoxSizer()
 hBox8.Add(BehaviorTxt, proportion=0, flag=wx.RIGHT, border=5)
 hBox8.Add(BehaviorCtl, proportion=0, flag=wx.EXPAND)
 
+# WRITE and CLOSE buttons
+WriteButton = wx.Button(bkg, label='WRITE HTML')
+WriteButton.Bind(wx.EVT_BUTTON, WriteHTMLNotesFile)
+def OnClose(event):
+    print 'OnClose called'
+    win.Close(True)
+CloseButton = wx.Button(bkg, label='CLOSE')
+CloseButton.Bind(wx.EVT_BUTTON, OnClose)
+hBox9 = wx.BoxSizer()
+hBox9.Add(WriteButton, proportion=1, flag=wx.LEFT, border=5)
+hBox9.Add(CloseButton, proportion=1, flag=wx.LEFT, border=5)
+
 # vertical box sizer
 vbox = wx.BoxSizer(wx.VERTICAL)
 vbox.Add(hBox1, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox2, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox3, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+vbox.Add(hBox3a, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox4, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox5, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox6, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox7, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 vbox.Add(hBox8, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-#ContentsCtl = wx.TextCtrl(bkg, style=wx.TE_MULTILINE | wx.HSCROLL)
-#vbox.Add(ContentsCtl, proportion=1,
-#         flag=wx.EXPAND | wx.LEFT | wx.BOTTOM | wx.RIGHT, border=5)
+vbox.Add(hBox9, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
 bkg.SetSizer(vbox)
 win.Show()
