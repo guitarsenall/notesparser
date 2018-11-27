@@ -286,7 +286,8 @@ def WriteHTMLNotesFile(event):
         return
     NotesHtmlFN = HTMLNotesNameCtl.GetValue()
     print 'write button called with ' + NotesHtmlFN
-    print 'HTMLTitle: ' + HTMLTitleCtl.GetValue()
+    HTMLTitle   = HTMLTitleCtl.GetValue()
+    print 'HTMLTitle: ' + HTMLTitle
     print 'max image width & height: %s, %s' % \
         ( MaxImageWidthCtl.GetValue(), MaxImageHeightCtl.GetValue() )
     SortSchemeChoice = SortSchemeCtl.GetSelection()
@@ -312,7 +313,7 @@ def WriteHTMLNotesFile(event):
         print 'wx.OK chosen'
         dlg.Destroy()
     print 'processing file'
-    handler = HTMLFileRenderer( NotesHtmlFN )
+    handler = HTMLFileRenderer( NotesHtmlFN, HTMLTitle )
     parser = BasicTextParser(handler)
     with open(InFileName, 'r' ) as InputFile:
         parser.parse(InputFile)

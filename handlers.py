@@ -87,15 +87,18 @@ class HTMLFileRenderer(Handler):
     Handler's start(), end(), and sub() methods. They implement basic
     markup as used in HTML documents.
     """
-    def __init__(self, HTMLFileName):
+    def __init__(self, HTMLFileName, HTMLTitle):
         #Handler.__init__(self)
         self.HTMLFileName = HTMLFileName
         self.HTMLFile   = open(HTMLFileName, 'w')
+        self.HTMLTitle  = HTMLTitle
     def CloseHTMLFile(self):
         self.HTMLFile.close()
         print self.HTMLFileName + ' closed'
     def start_document(self):
-        self.HTMLFile.write( '<html><head><title>...</title></head><body><PRE>')
+        self.HTMLFile.write( '<html><head><title>' )
+        self.HTMLFile.write( self.HTMLTitle )
+        self.HTMLFile.write( '</title></head><body><PRE>' )
     def end_document(self):
         self.HTMLFile.write(  '</PRE></body></html>')
         self.CloseHTMLFile()
